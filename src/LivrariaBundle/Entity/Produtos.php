@@ -58,6 +58,15 @@ class Produtos
     private $image;
     
     
+    
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="Genero")
+     * @ORM\JoinColumn(name="genero_id", referencedColumnName="id")
+     */
+    private $genero;
+    
+    
 
     /**
      * Set nome
@@ -187,5 +196,29 @@ class Produtos
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set genero
+     *
+     * @param \LivrariaBundle\Entity\Genero $genero
+     *
+     * @return Produtos
+     */
+    public function setGenero(\LivrariaBundle\Entity\Genero $genero = null)
+    {
+        $this->genero = $genero;
+
+        return $this;
+    }
+
+    /**
+     * Get genero
+     *
+     * @return \LivrariaBundle\Entity\Genero
+     */
+    public function getGenero()
+    {
+        return $this->genero;
     }
 }

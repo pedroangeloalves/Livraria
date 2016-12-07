@@ -6,8 +6,9 @@
     {% block stylesheets %}{% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     <link rel="stylesheet" href="{{ asset('css/bootstrap.css')}}"/>
+    
     <script type="text/javascript" src="{{ asset('js/jquery-3.1.1.min.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('js.bootstrap.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('js/bootstrap.js')}}"></script>
 
 
 </head>
@@ -25,8 +26,21 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">Painel</a></li>
-                    <li><a href="#">Produtos</a></li>
+                    <li><a href="{{ path('painel') }}">Painel</a></li>
+                    
+                    <li>
+                        
+                        <a id="menu-produtos" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >Produtos <span class="caret"> </span> </a>
+                        
+                            <ul class="dropdown-menu" aria-labelledby="menu-produtos">
+                                
+                                <li>  <a href="{{ path('produtos_index') }} ">Lista de Produtos</a></li>
+                                <li>  <a href="{{ path('genero_index') }} ">Lista de Generos</a></li>
+                                                            
+                            </ul>
+                        
+                    
+                    </li>
                     <li><a href="#">Caixa</a></li>
                     <li><a href="#">Usuários</a></li>
                 </ul>

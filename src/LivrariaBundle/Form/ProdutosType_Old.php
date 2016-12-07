@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
+
 class ProdutosType extends AbstractType
 {
     /**
@@ -14,7 +15,8 @@ class ProdutosType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('nome')
+        $builder
+                ->add('nome')
                 ->add('quantidade')
                 ->add('preco')
                 ->add('tipo', ChoiceType::class, array(
@@ -23,8 +25,7 @@ class ProdutosType extends AbstractType
                         "Revista" => "Revista"
                     )
                 ))
-                ->add('image')
-                ->add('genero')        ;
+                ->add('image')        ;
     }
     
     /**
