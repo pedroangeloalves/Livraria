@@ -1,82 +1,77 @@
 <?php
 
-
 namespace LivrariaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
-
-
 /**
- * Description of Produtos
+ *  Description of Produtos
  *
  * @author aluno
+ * 
  * @ORM\Entity
  * @ORM\Table(name="produtos")
  */
-
-
 class Produtos 
 {
-    /** @ORM\Column(type="integer")
+    /**
+     * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-  
-  
+    
     /**
      * @ORM\Column(type="string", length=100)
-     * @Assert\NotBlank(message="É obrigatório informar um nome para o Produto")
+     * @Assert\NotBlank(message="É obrigatório informar um nome para o produto")
      */
     private $nome;
     
     /**
-     *
-     * @ORM\Column(type="integer", length=5)
+     * @ORM\Column(type="integer", length=6)
      * @Assert\NotBlank()
      * @Assert\GreaterThanOrEqual(
-     *  value = 0,
-     *  message="A Quantidade deve ser maior ou igual a zero")
+     *     value = 0,
+     *      message="A quantidade deve ser maior ou igual a 0"
+     * )
      */
     private $quantidade;
     
     /**
-     *
      * @ORM\Column(type="decimal", scale=2)
-     * @Assert\NotBlank(message="É obrigatório informar um Preço")
-     * @Assert\GreaterThanOrEqual(
-     *  value = 0,
-     *  message="O Preço deve ser maior ou igual a zero")     */        
+     * @Assert\NotBlank()
+     */
     private $preco;
     
-    
     /**
-     *
      * @ORM\Column(type="string")
-     * @Assert\NotBlank(message="É obrigatório informar um Tipo")
-     */    
+     * @Assert\NotBlank()
+     */
     private $tipo;
     
     /**
-     *
      * @ORM\Column(type="string")
-     */    
-    private $image;
+     */
+    private $imagem;
     
-    
-    
-    /**
-     *
+     /**
      * @ORM\ManyToOne(targetEntity="Genero")
      * @ORM\JoinColumn(name="genero_id", referencedColumnName="id")
-     * @Assert\NotBlank(message="É obrigatório informar um Genero")
+     * @Assert\NotBlank()
      */
     private $genero;
     
-    
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set nome
@@ -175,37 +170,27 @@ class Produtos
     }
 
     /**
-     * Set image
+     * Set imagem
      *
-     * @param string $image
+     * @param string $imagem
      *
      * @return Produtos
      */
-    public function setImage($image)
+    public function setImagem($imagem)
     {
-        $this->image = $image;
+        $this->imagem = $imagem;
 
         return $this;
     }
 
     /**
-     * Get image
+     * Get imagem
      *
      * @return string
      */
-    public function getImage()
+    public function getImagem()
     {
-        return $this->image;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
+        return $this->imagem;
     }
 
     /**

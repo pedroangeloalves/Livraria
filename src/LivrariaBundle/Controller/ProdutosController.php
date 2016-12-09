@@ -66,6 +66,7 @@ class ProdutosController extends Controller
      */
     public function showAction(Produtos $produto)
     {
+                
         $deleteForm = $this->createDeleteForm($produto);
 
         return $this->render('LivrariaBundle:Produtos:show.html.twig', array(

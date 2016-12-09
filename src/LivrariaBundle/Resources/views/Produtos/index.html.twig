@@ -1,11 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
     
-        
-    <h1>Lista de Produtos <a href="{{ path('produtos_new') }}" class="btn btn-primary pull-right">Criar um novo Produto</a> </h1>
-    
-    
+        <h1>Lista de Produtos <a href="{{ path('produtos_new') }}" class="btn btn-primary pull-right">Criar novo produto</a></h1>
 
     <table class="table table-striped">
         <thead>
@@ -15,7 +13,7 @@
                 <th>Quantidade</th>
                 <th>Preço</th>
                 <th>Tipo</th>
-                <th>Image</th>
+                <th>Imagem</th>
                 <th>Ações</th>
             </tr>
         </thead>
@@ -27,14 +25,13 @@
                 <td>{{ produto.quantidade }}</td>
                 <td>{{ produto.preco }}</td>
                 <td>{{ produto.tipo }}</td>
-                <td>{{ produto.image }}</td>
+                <td>{{ produto.imagem }}</td>
                 <td>
-                    
                     <a href="{{ path('produtos_show', { 'id': produto.id }) }}" class="btn btn-default">
-                        <span class="glyphicon glyphicon-eye-open"> </span> </a>
-                        
+                        <span class="glyphicon glyphicon-eye-open"></span> </a>
                     <a href="{{ path('produtos_edit', { 'id': produto.id }) }}" class="btn btn-warning">
-                        <span class="glyphicon glyphicon-pencil"> </span </a>
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </a>
                     
                 </td>
             </tr>
@@ -42,5 +39,8 @@
         </tbody>
     </table>
 
-   
+  
+    
+
+
 {% endblock %}

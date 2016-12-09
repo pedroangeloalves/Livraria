@@ -1,10 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    
+ 
     <h1>Produto</h1>
 
-    <table class="table table-bordered" >
+    <table class="table">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -27,19 +27,20 @@
                 <td>{{ produto.tipo }}</td>
             </tr>
             <tr>
-                <th>Image</th>
-                <td>{{ produto.image }}</td>
+                <th>Imagem</th>
+                <td>{{ produto.imagem }}</td>
             </tr>
         </tbody>
     </table>
 
-    
-            <a href="{{ path('produtos_index') }}">Back to the list</a>
-            <a href="{{ path('produtos_edit', { 'id': produto.id }) }}">Edit</a>
-        <div class=""left>
+            <a href="{{ path('produtos_index') }}" class="left">Back to the list</a>
+
+            <a href="{{ path('produtos_edit', { 'id': produto.id }) }}" class="left">Edit</a>
+            <div class="left">
             {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
+                <input type="submit" value="Delete" >
             {{ form_end(delete_form) }}
-        </div>
-    
+            </div>
+            
+            
 {% endblock %}

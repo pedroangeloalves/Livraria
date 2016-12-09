@@ -14,20 +14,17 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Genero 
 {
-
-    /** @ORM\Column(type="integer")
+    /**
+     * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     * 
-     */    
-    
+     */
     private $id;
     
     /**
      * @ORM\Column(type="string", length=100)
-     */    
+     */
     private $nome;
-        
 
     /**
      * Get id
@@ -64,7 +61,7 @@ class Genero
     }
     
     public function __toString() 
-     {
-        return $this->id.'-'.$this->nome;
+    {
+        return $this->id .'-'. $this->nome;
     }
 }
