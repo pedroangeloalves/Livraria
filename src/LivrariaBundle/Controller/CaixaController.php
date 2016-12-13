@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use \LivrariaBundle\Entity\Cupom;
 use LivrariaBundle\Entity\CupomItem;
+use \LivrariaBundle\Entity\Produtos;
 
 /**
  * Description of CaixaController
@@ -21,24 +22,30 @@ class CaixaController extends Controller
      */
     public function pdvAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $cupom = new Cupom();
-        $cupom->setData(new \DateTime());
-        $cupom->setValorTotal(0);
-        $cupom->setVendedor(1);
+
+        $cupomId = $request->getSession()->get('cupom-id', null);
         
-        $em->persist($cupom);
-        $em->flush();
-        
-        $request->getSession()->set('cupom-id', $cupom->getId());
-        
-        
-        
+        if ($cupomId === null)
+        {
+            $cupom = new Cupom();
+            $cupom->setData(new \DateTime());
+            $cupom->setValorTotal(0);
+            $cupom->setVendedor(1);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $em->persist($cupom);
+            $em->flush();
+
+            $request->getSession()->set('cupom-id', $cupom->getId());
+            
+        }
+                                        
         return $this->render("LivrariaBundle:Caixa:pdv.html.twig");
     }
     
     /**
-     * @Route("/caixa/carregar")
+     * @Route("/caixa/carregar", name="pesquisar_produto")
      * @Method("POST")
      */     
     public function carregarProdutoAction(Request $request)
@@ -46,28 +53,48 @@ class CaixaController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         
-        $codProd = $request->request-get('codigo');
+        $codProd = $request->request->get('codigo');
         
-        $produto = $em->getRepository('LivrariaBundle\LivrariaBundle:Produtos')
-                ->find($codProd);
+        // dump($produto);die();
         
-        if ($produto == null)
-        {
-            return $this->json('erro');
-        } 
-        
-        $novoItem = new CupomItem();
-        $novoItem->setCupomId( $$request->getSession()->get('cupom-id')  );
-        $nomeItem->setDescricaoItem($produto->getNome());
-        $novoItem->setItemCod($codProd);
+        $cupomId = $request->getSession()->get('cupom-id');
+        $produto = $em->getRepository('LivrariaBundle:Produtos')
+                ->find($codProd);        
+        $cupom = $em->getRepository('LivrariaBundle:Cupom')
+                ->find($cupomId);
 
-        $novoItem->setQuantidade(1);
-        $novoItem->setValorUnitario($produto->getPreco() );
-                
-        $em->persist($novoItem);
-        $em->flush();
         
-        return $this->json('ok');                        
+        $quantItem = $em->getRepository('LivrariaBundle:CupomItem')
+                ->findBy(array("cupomId" => $cupomId));
+        
+      //  dump($quantItem);die();
+        
+        if ($produto instanceof Produtos)
+        {
+        
+            $novoItem = new CupomItem();
+            $novoItem->setCupomId($cupom);
+            $novoItem->setDescricaoItem($produto->getNome());
+            $novoItem->setItemCod($codProd);
+            $novoItem->setQuantidade(1);
+            $novoItem->setValorUnitario($produto->getPreco());
+            $novoItem->setOrdemItem(count($quantItem)+1);
+            
+            $em->persist($novoItem);
+            $em->flush();
+
+            $retorn["status"] = "ok";
+            $retorn["produtos"] = $produto;
+            
+        } else {
+            
+            $retorn["status"] = "erro";
+            $retorn["mensagem"] = $produto;
+            
+        }
+        
+        return $this->json($retorn);
+
         
     }
     
@@ -141,9 +168,8 @@ class CaixaController extends Controller
     }
         
     /**
-     * @Route("/caixa/listar")
+     * @Route("/caixa/listar", name="listagem")
      */
-    
     public function listarItensAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();

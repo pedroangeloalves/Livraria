@@ -11,20 +11,24 @@
                 
                 <div class="panel-body">
                     
+                    <form id="form-produto" action="{{ path('pesquisar_produto') }} " method="POST">
+                    
                     <div class="input-group">
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-barcode"></span>
                         </span>
-                        <input type="text" class="form-control" />
+                        <input id = "id-codigo" type="text" name="codigo" class="form-control" />
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-success">
+                            <button type="submit" class="btn btn-success">
                                 <span class="glyphicon glyphicon-ok"></span>
                             </button>
                         </span>
                     </div>
+                    </form>
                     
+                    <hr />
                     
-                    <div class="thumbnail">
+                    <div id="produto-detalhe"  class="thumbnail hide">
                         <img src="http://lorempixel.com/240/240/" width="240" height="240">
                         <div class="caption">
                           <h3>Nome do Produto</h3>
@@ -32,6 +36,11 @@
                           <p>Preço Unitário: R$ 123,56</p>
                         </div>
                   </div>
+                    
+                    <div id="erro" class="alert alert-danger hide">
+                        Produto não Encontrado
+                    </div>
+                    
                     
                 </div>
 
@@ -47,16 +56,14 @@
                 </div>
                 
                 <div class="panel-body">
-                    <ol>
-                        <li>Produto nome tal - Quant. 1 - Valor R$ 123,45</li>
-                        <li>Produto nome tal - Quant. 1 - Valor R$ 123,45</li>
-                        <li>Produto nome tal - Quant. 1 - Valor R$ 123,45</li>
-                        <li>Produto nome tal - Quant. 1 - Valor R$ 123,45</li>
+                    <ol id="lista-produtos">
+                        
+
                     </ol>
                 </div>
                 
                 <div class="panel-footer">
-                    Total a pagar: R$ 0,00
+                    Total a pagar: R$  <span id="valor-total">  0,00 </span>
                 </div>
             </div>
             
@@ -91,3 +98,64 @@
 </div>
     
 {% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" >
+        $(document).ready(function(){
+            
+            listagemProdutos();
+            
+            $('#form-produto').submit(function(evento){
+               evento.preventDefault();
+               
+               var valores = {
+                   "codigo": $('#cod-produto').val()
+               };
+               $.post('{{ path('pesquisar_produto') }}', valores, function(retorno){
+                   console.log(retorno);               
+                
+                    if (retorno.status == 'ok')
+                    {
+                        $('#erro').addClass('hide');
+                        $('#produto-detalhe').removeClass('hide');
+                        
+                        listagemProdutos();
+                        
+                    } else {
+                        
+                        $('#erro').removeClass('hide');
+                        $('#produto-detalhe').addClass('hide');
+                        
+                    }
+                
+                });
+               
+            });
+        
+        });
+        
+        function listagemProdutos()
+        {
+            $('#lista-produtos').empty();
+            $.getJSON("{{ path('listagem') }}", function(retorno){
+                
+                var total = 0;
+                                
+                retorno.forEach(function(el, ind){
+                    var li = $('<li>' + el.numOdem + ' - ' + el.descricao + ' - ' + el.valor +  '</li>');
+                    $('#lista-produtos').append(li);
+                    
+                    total += parseFloat(el.valor);
+    
+                });
+                
+                $('#valor-total').html(total.toFixed(2));
+                 
+            });
+        }
+                
+            
+        
+    </script>
+{% endblock %}
+    
