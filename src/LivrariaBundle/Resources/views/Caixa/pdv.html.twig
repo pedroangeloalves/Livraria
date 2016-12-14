@@ -17,7 +17,7 @@
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-barcode"></span>
                         </span>
-                        <input id = "id-codigo" type="text" name="codigo" class="form-control" />
+                        <input id="id-codigo" type="text" name="codigo" class="form-control" />
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-success">
                                 <span class="glyphicon glyphicon-ok"></span>
@@ -68,8 +68,8 @@
             </div>
             
             <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-estorno">Estornar Item</button>
-            <button type="button" class="btn btn-danger">Cancelar Venda</button>
-            <button type="button" class="btn btn-success">Concluir Venda</button>
+            <a href="{{ path('cancelar') }} " id="bt-cancelar" type="button" class="btn btn-danger">Cancelar Venda</a>
+            <a href="{{ path('concluir') }}" button type="button" class="btn btn-success">Concluir Venda</a>
             
             
         </div>
@@ -87,9 +87,9 @@
         <div class="modal-body">
             <div class="form-group">
                 <label>Informe o número do item:</label>
-                <input type="text" class="form-control" />
+                <input id="item-estorno"  type="text" class="form-control" />
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-success">Confirmar</button>
+                <button id="bt-confirmar-estorno" type="button" class="btn btn-success">Confirmar</button>
             </div>
         </div>
         
@@ -109,7 +109,7 @@
                evento.preventDefault();
                
                var valores = {
-                   "codigo": $('#cod-produto').val()
+                   "codigo": $('#id-codigo').val()
                };
                $.post('{{ path('pesquisar_produto') }}', valores, function(retorno){
                    console.log(retorno);               
@@ -126,10 +126,13 @@
                         $('#erro').removeClass('hide');
                         $('#produto-detalhe').addClass('hide');
                         
-                    }
-                
-                });
-               
+                    }                
+                });               
+            });
+
+            $('#bt-confirmar-estorno').click(function(){
+                var numItem = $('#item-estorno').val();
+                location.href = "/caixa/estorno/"+numItem;                                       
             });
         
         });
@@ -157,5 +160,6 @@
             
         
     </script>
+    
 {% endblock %}
     
